@@ -1,4 +1,4 @@
-# Netlify deploy config for the Industry 4.0 Technology Pillars training app.
+# Netlify deploy config for the Block 2 Integration & Communication training app.
 # Connect this GitHub repo in the Netlify dashboard and it builds automatically.
 
 [build]
