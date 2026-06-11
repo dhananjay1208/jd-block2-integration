@@ -33,6 +33,33 @@ export const uds: PillarModule = {
         text: 'The end-of-line tester uses UDS to interrogate each ECU and pull its report before the tractor ships.',
       },
     ],
+    primer: {
+      title: 'Know this before you play',
+      blocks: [
+        {
+          heading: 'CAN is the road, UDS is the conversation',
+          body: 'CAN is the bus underneath: every message on it is broadcast to all nodes. UDS rides on top of CAN as a question-and-answer with one ECU at a time. The tester asks one ECU a question and gets one answer back. So UDS does not replace CAN, and it is not wireless or a controller. It is the diagnostic conversation carried over the CAN link.',
+        },
+        {
+          heading: 'The four services you will use',
+          body: 'Each UDS service is a different kind of question. Reading DTCs pulls the fault list. ReadDataByIdentifier fetches one parameter by its number. Routine control tells the ECU to run a built-in test. Security access is the unlock step that must come before any protected write or flash.',
+        },
+        {
+          heading: 'Why the end-of-line tester wins',
+          body: 'The tester runs the same fixed sequence on every tractor: connect to the ECU over CAN, read the stored DTCs, read the key parameters by identifier, run the built-in self-test, then record the whole result against the VIN. Because the sequence is identical every time and the report is stored automatically, it beats a hand-held check that depends on a technician remembering to plug in and look.',
+        },
+      ],
+      table: {
+        caption: 'The four UDS services at a glance',
+        headers: ['Service', 'What you ask', 'What you get back'],
+        rows: [
+          ['Read DTCs', '"What faults are stored?"', 'The fault code list'],
+          ['ReadDataByIdentifier', '"What is parameter X?"', 'That one value, by its numbered identifier'],
+          ['Routine control', '"Run your self-test"', 'The test verdict'],
+          ['Security access', '"Unlock protected functions"', 'Permission to write or flash, after a challenge'],
+        ],
+      },
+    },
     mission:
       'Your mission: use UDS at end-of-line to ask each ECU for its fault codes and key parameters, so a tractor never ships with a stored fault nobody checked.',
   },
@@ -91,6 +118,8 @@ export const uds: PillarModule = {
       kind: 'sequence',
       id: 'uds-s2',
       points: 15,
+      setup:
+        'The end-of-line tester runs one fixed UDS sequence on every tractor. It starts with the physical link and ends with the permanent record.',
       prompt: 'Put the end-of-line UDS check in order.',
       recap: 'Ordered the end-of-line UDS check from connection through to recording against the VIN.',
       items: [

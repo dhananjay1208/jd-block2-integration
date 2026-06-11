@@ -31,6 +31,32 @@ export const canbus: PillarModule = {
         text: "Inside the tractor's ECUs, and on the end-of-line rigs and measurement devices that read them.",
       },
     ],
+    primer: {
+      title: 'Know this before you play',
+      blocks: [
+        {
+          heading: 'How a message travels',
+          body: 'An ECU with a value to share, say engine speed, puts a message onto the two-wire bus. The message carries an identifier and the data, nothing else. There is no destination address and no named receiver. Every node on the bus hears every message, and each one filters by ID, keeping the messages it cares about and ignoring the rest.',
+        },
+        {
+          heading: 'Arbitration: who goes first',
+          body: 'When two ECUs start transmitting at the same instant, the bus settles it by ID. The lower numeric ID has the higher priority and wins the bus without losing any time; the loser backs off and retries. So an urgent message, such as a brake command, always gets through ahead of routine chatter.',
+        },
+        {
+          heading: 'Why it survives a tractor',
+          body: 'The two wires carry a differential signal, so the electrical noise of a running engine affects both wires equally and cancels out. Every frame also carries error checking. A corrupted frame is rejected by every node and the sender resends it. No central master polls the nodes; any controller speaks when it has something to say.',
+        },
+      ],
+      table: {
+        caption: 'What CAN is, and what it is not',
+        headers: ['What CAN is', 'What CAN is not'],
+        rows: [
+          ['A broadcast bus: every node hears every message', 'An addressed network sending to one named receiver'],
+          ['Multi-master: any node speaks, priority sorts clashes', 'A central master polling each node in turn'],
+          ['Error-checked frames built for electrical noise', 'A fragile link that trusts every bit it receives'],
+        ],
+      },
+    },
     mission:
       "Your mission: read the tractor's engine and transmission ECUs on the end-of-line rig over CAN, and understand why a broadcast bus suits a vehicle full of controllers.",
   },
@@ -49,6 +75,8 @@ export const canbus: PillarModule = {
       kind: 'sequence',
       id: 'canbus-s1',
       points: 15,
+      setup:
+        'The engine ECU on the end-of-line rig has a fresh engine-speed reading. Trace what happens to it: the broadcast onto the two wires, the moment two senders clash, and the rig at the far end filtering by ID.',
       prompt: 'Put the handling of a single CAN message in order, from the ECU that has something to share to the rig that keeps it.',
       recap: 'Ordered the life of a CAN message: an ECU broadcasts, every node hears it, priority settles a clash, and the rig keeps the IDs it wants.',
       items: [
@@ -66,6 +94,8 @@ export const canbus: PillarModule = {
       id: 'canbus-s2',
       points: 12,
       scoreMode: 'perItem',
+      setup:
+        'A colleague describes the CAN bus from memory and gets some of it wrong. Two of the statements below describe a different kind of network, an addressed one with a master in charge. Use the "What CAN is, and what it is not" contrast you just read.',
       prompt: 'Sort each statement into true of CAN, or not how CAN works.',
       recap: 'Sorted the statements: CAN broadcasts to every node and arbitrates by message priority, it does not address one named receiver or run from a polling master.',
       buckets: [

@@ -32,6 +32,32 @@ export const modbus: PillarModule = {
         text: 'No built-in security and no information model. It moves numbers, not meaning, so the context lives in your documentation.',
       },
     ],
+    primer: {
+      title: 'Know this before you play',
+      blocks: [
+        {
+          heading: 'The data model: four kinds, all numbered',
+          body: 'Modbus holds exactly four kinds of data. Coils and discrete inputs are single bits, on or off. Input registers and holding registers are 16-bit numbers. Every one is addressed by number, nothing else. The address 40001 means "holding register number 1", 40002 means "holding register number 2", and so on. The protocol never says what the number contains. The vendor manual ships a register map, a list saying which register holds which value, and that map is the only place the meaning lives.',
+        },
+        {
+          heading: 'RTU and TCP, the two forms',
+          body: 'Modbus RTU runs over a serial RS-485 cable, the classic twisted-pair daisy chain. Modbus TCP carries the same requests over ordinary Ethernet, which is how Ignition usually reaches a device today.',
+        },
+        {
+          heading: 'Where it wins, where it loses',
+          body: 'Pick Modbus when a simple device just has to report a basic value and already speaks it: the data arrives at almost no cost. Pick a richer protocol such as OPC UA when you need security, encryption or an information model, because Modbus offers none of those. It moves bare numbers and trusts the network around it.',
+        },
+      ],
+      table: {
+        caption: 'Strengths vs limits at a glance',
+        headers: ['Strengths', 'Limits'],
+        rows: [
+          ['Supported by almost every device, sensor and meter ever made', 'No built-in security, so it needs a protected network'],
+          ['Simple and cheap to implement and connect', 'No information model, only numbered registers you must document'],
+          ['Fine for basic values from simple devices', 'Polling only: the client must keep asking, the device never pushes'],
+        ],
+      },
+    },
     mission:
       'Your mission: bring the hydraulics line\'s older leak testers and meters into Ignition over Modbus, and write down what each register means so the numbers are not a mystery.',
   },
@@ -50,6 +76,8 @@ export const modbus: PillarModule = {
       kind: 'hotspot',
       id: 'modbus-s1',
       points: 12,
+      setup:
+        'How to read a register map: a Modbus device publishes its data as a numbered list of registers, and the vendor manual says what each number holds. Reading the device means asking for a register by its number. Below is the manual\'s map for the leak tester, four holding registers with their meanings written next to them. The labels are given; your job is to pick the register whose meaning is the pressure being applied right now, not a test result, a tally or a status.',
       caption:
         'A Modbus holding-register map for a leak tester. Tap the register that holds the live test pressure.',
       prompt: 'Which register holds the live test pressure?',

@@ -138,6 +138,19 @@ export interface PillarModule {
     whatIsIt: string
     /** Exactly four key facets. */
     facets: Array<{ label: string; text: string }>
+    /**
+     * Deeper teaching shown after the facets, before the anchor story.
+     * Everything the steps test must be taught here, in the facets, or in a
+     * step's own setup, so participants can answer from the card alone.
+     */
+    primer?: {
+      /** Section heading. Defaults to "Know this before you play". */
+      title?: string
+      /** Short titled teaching blocks. */
+      blocks?: Array<{ heading: string; body: string }>
+      /** Optional compact comparison table, e.g. radios by range and power. */
+      table?: { caption?: string; headers: string[]; rows: string[][] }
+    }
     /** The "Your Mission" line. */
     mission: string
   }

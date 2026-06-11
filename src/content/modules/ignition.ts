@@ -31,6 +31,58 @@ export const ignition: PillarModule = {
         text: 'It is licensed per server, not per tag or per client. Adding tags, screens and phones does not add cost.',
       },
     ],
+    primer: {
+      title: 'Know this before you play',
+      blocks: [
+        {
+          heading: 'Two ways to store',
+          body: 'The tag historian records a tag\'s values over time so you can trend them later, for example torque drift across a shift. A transaction group logs values as rows in a SQL database, for example one row per completed test. Both are the store job: historian for trends, transaction groups for records.',
+        },
+        {
+          heading: 'Licensed per server',
+          body: 'Ignition is licensed per server, not per tag, per screen or per client. Once the server is licensed, adding more tags, more Perspective screens or more phones watching them costs nothing extra. That is why the hub can spread across the floor without the bill spreading with it.',
+        },
+        {
+          heading: 'Where it sits in the journey',
+          body: 'South side: Ignition collects from the machines, reading PLCs, CNCs and test rigs over OPC UA and Modbus. North side: it publishes those tags over MQTT to a broker, which feeds RabbitMQ and Kafka. It is the collector and hub in the middle. It is not the broker, not the analytics database, and it does not replace the PLC.',
+        },
+        {
+          heading: 'Adding a new device is configuration',
+          body: 'When a new rig arrives speaking Modbus, you add a device connection in Ignition and map its registers to tags. The rig then joins the same tag model, the same live screens and the same upstream feed. No new application, no extra licence, no typing.',
+        },
+      ],
+      table: {
+        caption: 'The pieces and the job each one does',
+        headers: ['Piece', 'Job', 'What it does'],
+        rows: [
+          [
+            'OPC UA / Modbus drivers',
+            'Connect',
+            'Pull tag values off PLCs, CNCs and test rigs into one shared tag model',
+          ],
+          [
+            'Tag historian',
+            'Store',
+            'Records a tag\'s values over time for trending',
+          ],
+          [
+            'Transaction groups',
+            'Store',
+            'Log values to a SQL database, one row per event such as a test',
+          ],
+          [
+            'Perspective',
+            'Visualise',
+            'The web HMI and SCADA module. Screens open in any browser, including phones',
+          ],
+          [
+            'MQTT Transmission',
+            'Publish',
+            'Publishes tags by exception to an MQTT broker for the upstream chain',
+          ],
+        ],
+      },
+    },
     mission:
       'Your mission: stand up Ignition as the one hub that collects the end-of-line test data, shows it live in a browser, and forwards it upstream, with nothing re-keyed.',
   },
@@ -50,6 +102,8 @@ export const ignition: PillarModule = {
       id: 'ignition-s1',
       points: 12,
       scoreMode: 'perItem',
+      setup:
+        'Every capability below is one of the pieces from the primer table: the drivers, the historian, transaction groups, Perspective and MQTT Transmission.',
       prompt:
         'Sort each capability into the job Ignition is doing: connect, store, visualise or publish.',
       recap: 'Placed each capability under Ignition\'s four jobs correctly.',
@@ -103,7 +157,7 @@ export const ignition: PillarModule = {
       id: 'ignition-s2',
       points: 20,
       setup:
-        'A new end-of-line test rig arrives. It speaks Modbus TCP. The team wants its results in the same live view as the other stands and sent upstream like the rest, not stranded on the rig.',
+        'A new end-of-line test rig arrives. It speaks Modbus TCP, a protocol Ignition already has a driver for. The team wants its results in the same live view as the other stands and sent upstream like the rest, not stranded on the rig.',
       prompt: 'You own the integration. How do you bring this rig in?',
       recap: 'Added a Modbus device connection and mapped its registers into the shared tag model.',
       choices: [

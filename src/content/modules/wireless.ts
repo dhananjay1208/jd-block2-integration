@@ -32,6 +32,60 @@ export const wireless: PillarModule = {
         text: 'LoRa for sparse battery sensors across a wide yard, private 5G for AGVs that need wide coverage and low latency.',
       },
     ],
+    primer: {
+      title: 'Know this before you play',
+      blocks: [
+        {
+          heading: 'The power-versus-range quadrant',
+          body: 'Plot the radios on two axes, power draw against range, and the field sorts itself. Wi-Fi and cellular sit in the high-power half: they move a lot of data and need mains power or a big battery. Bluetooth and Zigbee sit in the low-power, short-range corner: coin cells last, but you stay within metres. LPWAN radios such as LoRa, Sigfox and NB-IoT sit in the low-power, long-range corner: kilometres of reach on a small battery, but only a few bytes at a time. No radio sits in every corner at once. That empty corner, long range plus high bandwidth plus low power, is the trade-off the whole module turns on.',
+        },
+        {
+          heading: 'How to choose',
+          body: 'Start from the device\'s tightest constraint, not from the radio you already have. Does it run on a battery for years? That rules out Wi-Fi and cellular. Does it move around the plant? That rules out a cable and points to Bluetooth for a handheld or private 5G for a roaming vehicle. Does it push video or large files? That demands Wi-Fi or 5G, and power to match. Name the constraint, then read the table below.',
+        },
+      ],
+      table: {
+        caption: 'The five floor radios at a glance',
+        headers: ['Radio', 'Range', 'Power draw', 'Data rate', 'Fits best'],
+        rows: [
+          [
+            'Bluetooth / BLE',
+            'About 10 m',
+            'Very low, runs on a coin cell',
+            'Moderate',
+            'Handheld tools and wearables, point to point',
+          ],
+          [
+            'Zigbee',
+            '10 to 100 m, extends by mesh',
+            'Very low',
+            'Low',
+            'Dense clusters of small sensors; the mesh self-heals',
+          ],
+          [
+            'Wi-Fi',
+            'About 50 m indoors',
+            'High',
+            'High',
+            'Tablets, cameras, anything needing real throughput',
+          ],
+          [
+            'LoRa / LPWAN',
+            '2 to 15 km',
+            'Very low, years on a battery',
+            'Very low, bytes not video',
+            'Sparse battery sensors across a yard',
+          ],
+          [
+            'Private 5G / cellular',
+            'Plant-wide and beyond',
+            'High, suits powered devices',
+            'High, with low latency',
+            'AGVs and mobile robots needing wide coverage',
+          ],
+        ],
+      },
+    },
     mission:
       'Your mission: match each thing on the floor, a cordless torque tool, a yard tank sensor, an AGV, a dense sensor cluster, to the wireless technology that fits its range, power and bandwidth.',
   },
@@ -51,6 +105,8 @@ export const wireless: PillarModule = {
       id: 'wireless-s1',
       points: 15,
       scoreMode: 'perItem',
+      setup:
+        'Five devices, five radios. For each device, name its tightest constraint first: battery life, distance, movement, or data volume. Then pick the radio from the table whose range, power and data rate fit that constraint.',
       prompt: 'Match each device to the wireless technology that fits its range, power and bandwidth.',
       recap: 'Matched each device on the floor to the radio that fit its range, power and bandwidth.',
       buckets: [
@@ -97,6 +153,8 @@ export const wireless: PillarModule = {
       kind: 'mcq',
       id: 'wireless-s2',
       points: 10,
+      setup:
+        'Recall the quadrant: Wi-Fi and cellular in the high-power half, Bluetooth and Zigbee in low-power short-range, LoRa and the other LPWANs in low-power long-range. One corner of that map stays empty.',
       prompt: 'Why can a single wireless technology not be long-range, high-bandwidth and low-power all at once?',
       recap: 'Saw that range, power and bandwidth trade against each other, so gaining one costs another.',
       options: [

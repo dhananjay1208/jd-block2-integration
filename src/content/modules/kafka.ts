@@ -34,6 +34,29 @@ export const kafka: PillarModule = {
         text: 'The analytics backbone at the top of the journey, where the plant event stream lands for dashboards, models and long-range analysis.',
       },
     ],
+    primer: {
+      title: 'Know this before you play',
+      blocks: [
+        {
+          heading: 'The log, not the letterbox',
+          body: 'A queue hands a message to one consumer and deletes it. Kafka appends events to a log and leaves them there for the retention window. So a dashboard, a quality model and the warranty team can each read the same stream at their own pace, and a brand-new consumer can start from the beginning.',
+        },
+        {
+          heading: 'Retention sets the replay window',
+          body: 'If retention is 7 days, a consumer that was offline can come back and catch up on up to 7 days of missed events. Nothing older than the retention window is still on the log.',
+        },
+      ],
+      table: {
+        caption: 'Four Kafka terms, in plain words',
+        headers: ['Term', 'What it is'],
+        rows: [
+          ['Topic', 'A named stream of events, like a ledger for torque results'],
+          ['Partition', 'A slice of a topic, so the load spreads across brokers and many consumers read in parallel'],
+          ['Retention', 'How long events are kept, set by time or size. Events are NOT deleted when read'],
+          ['Offset', 'The bookmark each consumer group keeps in the stream. Rewind the bookmark and you replay history'],
+        ],
+      },
+    },
     mission:
       'Your mission: land the torque-line event stream in Kafka so analytics can replay years of fastening data and tie a field warranty pattern back to the exact build conditions.',
   },

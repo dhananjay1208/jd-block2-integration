@@ -34,6 +34,30 @@ export const rabbitmq: PillarModule = {
         text: 'It takes Ignition’s MQTT stream through its MQTT plugin and hands it on reliably to the next stage.',
       },
     ],
+    primer: {
+      blocks: [
+        {
+          heading: 'The path of one message',
+          body:
+            'Follow one leak-test result through the broker. The producer, here Ignition, publishes it. It lands on an exchange, which is a router, not a store. The exchange looks at the routing key and forwards the message into one or more queues. The queue is the buffer: it holds the message, absorbing a burst if many arrive at once. The consumer, here the bridge to the next stage, reads from the queue and sends back an acknowledgement. Only then does the queue let the message go.',
+        },
+        {
+          heading: 'Exchange types in one line each',
+          body:
+            'Direct sends the message to the one queue whose binding matches the routing key exactly. Topic matches the key against a pattern, so one message can reach several interested queues. Fanout ignores the key and copies the message to every queue bound to the exchange.',
+        },
+        {
+          heading: 'Why acknowledgement matters',
+          body:
+            'An acknowledgement is the consumer telling the broker "I have processed this one". If a consumer dies mid-message, the unacknowledged message goes back on the queue and is delivered again, so a crash loses nothing. The same holds during a restart: messages simply wait in the queue, in order, until a consumer returns and starts acknowledging them.',
+        },
+        {
+          heading: 'One line to remember for the Kafka card',
+          body:
+            'In RabbitMQ, a message that has been consumed and acknowledged is gone from the queue. Keep that in mind for the Kafka card, where messages are kept on a log and can be replayed later.',
+        },
+      ],
+    },
     mission:
       'Your mission: put RabbitMQ between Ignition and the analytics pipeline so a burst of hydraulics test data is buffered and delivered reliably, never dropped because a consumer was busy.',
   },
@@ -53,6 +77,8 @@ export const rabbitmq: PillarModule = {
       id: 'rabbitmq-s1',
       points: 12,
       scoreMode: 'perItem',
+      setup:
+        'Recall the path of one message: producer publishes, exchange routes by key, queue buffers and holds, consumer reads and acknowledges.',
       prompt: 'Sort each item into the part of the RabbitMQ model it belongs to.',
       recap: 'Sorted each item into producer, exchange, queue or consumer.',
       buckets: [
@@ -133,6 +159,8 @@ export const rabbitmq: PillarModule = {
       kind: 'mcq',
       id: 'rabbitmq-s3',
       points: 10,
+      setup:
+        'The next card in the journey is Kafka. Both move messages between systems, but they treat a delivered message very differently.',
       prompt: 'How does RabbitMQ differ from Kafka?',
       recap: 'Identified RabbitMQ as a routing broker with consumed-and-acknowledged messages, against Kafka’s retained log.',
       options: [
@@ -163,6 +191,8 @@ export const rabbitmq: PillarModule = {
       kind: 'mcq',
       id: 'rabbitmq-s4',
       points: 10,
+      setup:
+        'The consumer sends an acknowledgement back to the broker after it has processed each message.',
       prompt: 'What does a per-message acknowledgement give you?',
       recap: 'Named acknowledgement as confirmation a message was processed, so it survives a consumer failure.',
       options: [

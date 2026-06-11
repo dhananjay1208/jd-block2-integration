@@ -33,6 +33,37 @@ export const opcua: PillarModule = {
         text: 'The common language between PLCs, Ignition and other systems, so one vendor device can be read by another vendor software.',
       },
     ],
+    primer: {
+      title: 'Know this before you play',
+      blocks: [
+        {
+          heading: 'Interoperability: one standard, any vendor',
+          body: 'OPC UA is one open standard that any vendor can implement, and it runs on any operating system. So a Fanuc CNC, a Siemens PLC and Ignition all speak the same language. A modern device and third-party software connect the standard way, with no custom bridge or hand-built adapter per brand.',
+        },
+        {
+          heading: 'Security built in',
+          body: 'OPC UA clients authenticate before they get data, and the traffic is encrypted, so a value cannot be read or changed in transit. Older floor protocols trusted the wire: anything plugged into the network could listen or write. With OPC UA, security is part of the standard, not bolted on later.',
+        },
+        {
+          heading: 'The information model: values that explain themselves',
+          body: 'A raw protocol hands you 1450 and nothing else. OPC UA hands you SpindleTemperature, type Float, units degrees C, on machine 7. The name, type, units and structure travel with the value, so the receiving system knows what the number means without a hand-written mapping for every tag.',
+        },
+        {
+          heading: 'Where it came from',
+          body: 'The original OPC Classic ran only on Windows, built on the COM and DCOM stack. OPC UA replaced it: rebuilt to be platform-independent, secure by design, and to carry the full information model. That is the key difference between the two.',
+        },
+      ],
+      table: {
+        caption: 'The same spindle reading, two ways',
+        headers: ['What arrives', 'Raw register', 'OPC UA'],
+        rows: [
+          ['Value', '1450', '145.0'],
+          ['Name', 'None, just an address', 'SpindleTemperature'],
+          ['Type and units', 'Unknown, you guess the scaling', 'Float, degrees C'],
+          ['Belongs to', 'Unknown', 'Machine 7, machining line'],
+        ],
+      },
+    },
     mission:
       'Your mission: connect the machining CNCs to Ignition over OPC UA so every value arrives named, typed and secure, whatever brand the controller is.',
   },

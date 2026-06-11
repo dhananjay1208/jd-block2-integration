@@ -21,6 +21,13 @@ export function validateModules(): void {
       problems.push(`${m.id}: expected 4 facets, got ${m.intro.facets.length}`)
     if (!sourceLabels.has(m.results.source))
       problems.push(`${m.id}: source not in sources.ts -> "${m.results.source}"`)
+    if (m.intro.primer?.table) {
+      const w = m.intro.primer.table.headers.length
+      for (const [i, row] of m.intro.primer.table.rows.entries()) {
+        if (row.length !== w)
+          problems.push(`${m.id}: primer table row ${i} has ${row.length} cells, expected ${w}`)
+      }
+    }
 
     for (const step of m.steps) {
       if (step.kind === 'mcq') {

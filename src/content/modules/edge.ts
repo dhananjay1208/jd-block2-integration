@@ -31,6 +31,35 @@ export const edge: PillarModule = {
         text: 'More nodes to manage and keep secure. Edge is compute you now own out on the floor.',
       },
     ],
+    primer: {
+      title: 'Know this before you play',
+      blocks: [
+        {
+          heading: 'Store-and-forward, step by step',
+          body: 'The plant link drops. The edge gateway keeps collecting and writes every reading to its local buffer with a timestamp. The link returns. The buffer drains in timestamp order, oldest first, until it is empty. The central historian receives the whole window as if the outage never happened: no gap, no out-of-order points. The weak choice is keeping only the latest value, because one snapshot cannot show a trend, such as a tool wearing and a dimension drifting, that built up during the outage.',
+        },
+        {
+          heading: 'Report-by-exception, with the arithmetic',
+          body: 'A sensor sampled every 100 milliseconds produces 10 readings a second, which is 600 a minute. If the value only changes about 5 times a minute, then 595 of those 600 messages are repeats. Sending only the changes removes roughly 99 percent of the traffic, and the upstream picture is identical because nothing new was in the repeats.',
+        },
+        {
+          heading: 'The split: fast and local versus heavy and shared',
+          body: 'Put a task at the edge when it must survive a link drop or react in milliseconds, faster than a round trip to a server allows. Put a task at the centre when it needs data from many lines or plants at once, or storage measured in years. A small node on the floor has neither the compute nor the disk for plant-wide work, and the centre is too far away for millisecond reactions.',
+        },
+      ],
+      table: {
+        caption: 'Where does each task belong?',
+        headers: ['Task', 'Edge or centre', 'Why'],
+        rows: [
+          ['Hold readings while the link is down', 'Edge', 'Only the node next to the machine can keep collecting when the network is gone'],
+          ['Filter out unchanged values before sending', 'Edge', 'A filter at the source stops repeats from ever entering the network'],
+          ['Trip a safety action within milliseconds', 'Edge', 'A round trip to a central server takes too long; the logic must run locally'],
+          ['Build a model from data across all plants', 'Centre', 'Needs data and compute from many sites at once, far beyond one floor node'],
+          ['Compare performance across several lines', 'Centre', 'Only the centre sees every line, so only the centre can compare them'],
+          ['Store many years of process history', 'Centre', 'Long-term archives need central disk; a floor node has limited storage'],
+        ],
+      },
+    },
     mission:
       'Your mission: put an edge gateway on the machining line so a dropped network link never loses a single reading, and only meaningful changes travel upstream.',
   },
@@ -129,7 +158,7 @@ export const edge: PillarModule = {
       id: 'edge-s3',
       points: 13,
       setup:
-        'A machining sensor sends a reading every 100 milliseconds, so ten times a second. The actual value only changes a few times a minute.',
+        'A machining sensor sends a reading every 100 milliseconds, so 10 a second and 600 a minute. The actual value only changes about 5 times a minute.',
       prompt: 'Roughly what percentage of those messages can report-by-exception remove?',
       recap: 'Estimated that report-by-exception strips the vast majority of unchanged messages.',
       min: 0,

@@ -33,6 +33,26 @@ export const mqtt: PillarModule = {
         text: 'The way data leaves Ignition. The MQTT Transmission module publishes tags by exception to the broker.',
       },
     ],
+    primer: {
+      blocks: [
+        {
+          heading: 'The pub/sub triangle',
+          body: 'Walk one value through. Ignition publishes the oven temperature to the topic paint/oven1/temp. The broker receives it, looks up who has subscribed to that topic, and forwards the message to each of them. The plant dashboard gets it, and the analytics feed gets the same message at the same moment. Ignition never knows or cares who is listening. The broker routes messages in flight, it is not a long-term data store. That is the whole model: publishers send to topics, the broker routes, subscribers receive.',
+        },
+        {
+          heading: 'Report by exception',
+          body: 'Publish only when the value changes. An oven temperature that holds steady for an hour sends nothing for an hour, then one message the moment it moves. Compare that with five systems each polling Ignition every second for thousands of tags, mostly asking for values that have not changed. This is why MQTT stays light where polling floods the link.',
+        },
+        {
+          heading: 'Sparkplug B in one paragraph',
+          body: 'Plain MQTT lets every team invent its own topic names and payload formats, so nothing lines up. Sparkplug B fixes the topic namespace and makes the payload typed and stateful, and it adds birth and death certificates so the system knows the moment a device drops off the network. It is what Ignition publishes through its MQTT Transmission module. It does not encrypt anything and it does not replace the broker, it standardises what travels through it.',
+        },
+        {
+          heading: 'Any broker will do',
+          body: 'Any MQTT-capable broker can stand in the middle, including RabbitMQ, which acts as an MQTT broker through a plugin. That is exactly the setup in our demo: Ignition publishes, RabbitMQ\'s MQTT listener receives and routes.',
+        },
+      ],
+    },
     mission:
       'Your mission: publish the paint shop data out of Ignition by MQTT, by exception, so thousands of readings become a light, change-only stream the rest of the plant can subscribe to.',
   },
@@ -81,6 +101,8 @@ export const mqtt: PillarModule = {
       id: 'mqtt-s2',
       points: 12,
       scoreMode: 'perItem',
+      setup:
+        'Three roles, one triangle: publishers send data to topics, the broker receives and routes by topic, subscribers receive what they asked for. The broker can be any MQTT-capable middleman, including RabbitMQ through its MQTT plugin.',
       prompt: 'Sort each item into the MQTT model.',
       recap: 'Sorted each item into publisher, broker or subscriber.',
       buckets: [
