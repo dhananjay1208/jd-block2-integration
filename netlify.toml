@@ -1,0 +1,23 @@
+# Netlify deploy config for the Industry 4.0 Technology Pillars training app.
+# Connect this GitHub repo in the Netlify dashboard and it builds automatically.
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  # Vite 8 needs a current Node. Pin it so local and Netlify builds match.
+  NODE_VERSION = "22"
+
+# Single-page-app fallback. The app uses hash routing so this is a safety net,
+# and it keeps deep links working if the router is ever changed.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Long-cache the fingerprinted build assets.
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"

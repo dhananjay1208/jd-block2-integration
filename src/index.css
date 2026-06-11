@@ -1,0 +1,86 @@
+@import 'tailwindcss';
+
+/* ============================================================
+   John Deere brand theme for the Session 1 web app
+   ============================================================ */
+@theme {
+  --color-jd-green: #367c2b;
+  --color-jd-green-dark: #23501c;
+  --color-jd-green-deep: #16320f;
+  --color-jd-green-mist: #e8f0e4;
+  --color-jd-yellow: #ffde00;
+  --color-jd-yellow-dark: #c9a800;
+  --color-jd-yellow-soft: #fff6c2;
+  --color-cream: #f7f8f4;
+  --color-ink: #1a1a1a;
+  --color-ink-soft: #4a4a4a;
+  --color-line: #e2e4dd;
+
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',
+    Arial, sans-serif;
+
+  --shadow-card: 0 1px 2px rgba(22, 50, 15, 0.06), 0 6px 20px rgba(22, 50, 15, 0.08);
+  --shadow-lift: 0 8px 30px rgba(22, 50, 15, 0.16);
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background: var(--color-cream);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Honour iOS safe areas when used full-screen on a phone */
+#root {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Hide scrollbars on horizontal chip rows but keep them functional */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.h-display {
+  letter-spacing: -0.02em;
+  line-height: 1.08;
+}
+
+/* Animated data flow along the journey diagram edges. The overlay stroke is
+   dashed; when .jd-flow is applied it marches toward the target end. */
+.jd-flow {
+  stroke-dasharray: 10 12;
+  animation: jdFlow 0.9s linear infinite;
+}
+@keyframes jdFlow {
+  to {
+    stroke-dashoffset: -22;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .jd-flow {
+    animation: none;
+  }
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
